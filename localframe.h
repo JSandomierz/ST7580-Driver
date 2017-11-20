@@ -5,7 +5,7 @@
 class LocalFrame
 {
 public:
-    LocalFrame(unsigned char STX, unsigned char Length, unsigned char CMD, unsigned char *Data);
+    LocalFrame(unsigned char STX, unsigned char CMD, unsigned char *Data, unsigned char dataLength);
     ~LocalFrame();
     unsigned char *packFrame();
     unsigned int getFrameLength();

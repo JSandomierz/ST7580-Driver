@@ -3,9 +3,9 @@
 #include <qstring.h>
 #include <qdebug.h>
 
-LocalFrame::LocalFrame(unsigned char STX, unsigned char Length, unsigned char CMD, unsigned char *Data){
+LocalFrame::LocalFrame(unsigned char STX, unsigned char CMD, unsigned char *Data, unsigned char dataLength){
     this->STX = STX;
-    this->Length = Length;
+    this->Length = dataLength;
     this->CommandCode = CMD;
     this->Data = Data;
     checksum=0;
@@ -18,7 +18,7 @@ LocalFrame::LocalFrame(unsigned char STX, unsigned char Length, unsigned char CM
     }
     //test
     QString valueInHex= QString("%1").arg(checksum , 0, 16);
-    qDebug()<<"Checksum = "<<valueInHex;
+    //qDebug()<<"Checksum = "<<valueInHex;
 }
 
 LocalFrame::~LocalFrame(){

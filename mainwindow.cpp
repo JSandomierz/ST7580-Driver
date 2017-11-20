@@ -24,6 +24,7 @@ MainWindow::MainWindow(QWidget *parent) :
 
 MainWindow::~MainWindow()
 {
+    driver->closePort();
     delete ui;
 }
 
@@ -46,6 +47,7 @@ void MainWindow::on_ButtonConnect_clicked()
 void MainWindow::on_ButtonReset_clicked()
 {
     if( driver->isPortOpen ){
+        qDebug()<<"Reset";
         driver->resetDevice();
     }
 }
