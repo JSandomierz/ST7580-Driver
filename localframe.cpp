@@ -41,3 +41,24 @@ unsigned char* LocalFrame::packFrame(){
     data[Length + 4] = (unsigned char)( checksum >>8);
     return data;
 }
+
+unsigned int LocalFrame::computeChecksum(){
+    unsigned char* f = this->packFrame();
+    //f[Length+3] = 0x26;
+    //f[Length + 4] = 0x05;
+    unsigned int checksum = 0;
+    checksum += f[Length + 3] << 8;
+    checksum += ( f[Length + 4]);
+    return checksum;
+}
+
+unsigned char* LocalFrame::constructPHYFrame(QString data){
+    unsigned char* dataArr = new unsigned char[data.size()+1];
+    unsigned char settings = 0;
+    dataArr[0] = settings;
+    for(int i=1;i<data.size() && i<255;++i){
+        dataArr[i] = data.at(i).toLatin1();
+    }
+    LocalFrame f(0x02, 0x24, dataArr, data.size()+1);
+    return f.packFrame();
+}

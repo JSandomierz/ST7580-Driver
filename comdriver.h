@@ -9,17 +9,19 @@ class COMDriver: public QObject
     Q_OBJECT
 public:
     bool isPortOpen;
-
     COMDriver(QObject *_parent);
     QList<QSerialPortInfo> getPorts();
     bool openPort(QString &portName);
     void closePort();
     void resetDevice();
+    void beginSendingDLFrame(QString message);
+    //void sendMessage(QString message);
+
 private:
     QSerialPort* qSerialPort;
 
-    QTimer timer;
-    QQueue<unsigned char> receivedData;
+    QTimer* timer;
+    QVector<unsigned char> receivedData;
 
     unsigned char ACK = 0x06;
     unsigned char NAK = 0x15;
@@ -28,12 +30,15 @@ private:
     int Tic = 10;//ms
     int Tsr = 200;//ms
     int Tack = 40;//ms
-    bool timeoutFlag = false;
+
+    QString message;
+
 public slots:
     void receiveBytes();
-    void timeoutHandler();
+    void receiveFrame();
+
     void sendReset();
-    void receiveAck();
+    void sendDLFrame();
 };
 
 #endif // COMDRIVER_H

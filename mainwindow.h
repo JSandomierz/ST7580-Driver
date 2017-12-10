@@ -21,6 +21,8 @@ private slots:
     void on_ButtonConnect_clicked();
     void on_ButtonReset_clicked();
 
+    void on_pushButton_clicked();
+
 private:
     Ui::MainWindow *ui;
 

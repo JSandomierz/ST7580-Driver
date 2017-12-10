@@ -51,3 +51,11 @@ void MainWindow::on_ButtonReset_clicked()
         driver->resetDevice();
     }
 }
+
+void MainWindow::on_pushButton_clicked()
+{
+    if( driver->isPortOpen ){
+        qDebug()<<"Reset";
+        driver->beginSendingDLFrame("Hello world");
+    }
+}

@@ -1,6 +1,7 @@
 #ifndef LOCALFRAME_H
 #define LOCALFRAME_H
 
+#include <QString>
 
 class LocalFrame
 {
@@ -9,6 +10,8 @@ public:
     ~LocalFrame();
     unsigned char *packFrame();
     unsigned int getFrameLength();
+    unsigned char* constructPHYFrame(QString data);
+    unsigned int computeChecksum();
 
     unsigned char STX;
     unsigned char Length;
