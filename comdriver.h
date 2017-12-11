@@ -14,7 +14,7 @@ public:
     bool openPort(QString &portName);
     void closePort();
     void resetDevice();
-    void beginSendingDLFrame(QString message);
+    void beginSendingDLFrame(int frequencyChoice, int modulationChoice, QString message);
     //void sendMessage(QString message);
 
 private:
@@ -32,6 +32,8 @@ private:
     int Tack = 40;//ms
 
     QString message;
+    int frequencyChoice;
+    int modulationChoide;
 
 public slots:
     void receiveBytes();

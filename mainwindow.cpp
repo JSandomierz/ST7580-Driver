@@ -55,7 +55,7 @@ void MainWindow::on_ButtonReset_clicked()
 void MainWindow::on_pushButton_clicked()
 {
     if( driver->isPortOpen ){
-        qDebug()<<"Reset";
-        driver->beginSendingDLFrame("Hello world");
+        qDebug()<<"DL send "<<ui->lineEdit_msg->text();
+        driver->beginSendingDLFrame(ui->comboBox_frequency->currentIndex(), ui->comboBox_modulation->currentIndex(), ui->lineEdit_msg->text());
     }
 }

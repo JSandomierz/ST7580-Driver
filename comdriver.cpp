@@ -42,8 +42,11 @@ void COMDriver::resetDevice(){//we assume that port is open
     QTimer::singleShot(Tsr-20,this,SLOT(sendReset()));
 }
 
-void COMDriver::beginSendingDLFrame(QString message){
+void COMDriver::beginSendingDLFrame(int frequencyChoice, int modulationChoice, QString message){
     this->message = message;
+    this->frequencyChoice = frequencyChoice;
+    this->modulationChoide = modulationChoice;
+    if(modulationChoice==6) this->modulationChoide = 7; //manual p 26
     qSerialPort->setRequestToSend(true);
     QTimer::singleShot(Tsr-100,this,SLOT(sendDLFrame()));
 }
@@ -57,7 +60,10 @@ void COMDriver::sendReset(){
 void COMDriver::sendDLFrame(){
     unsigned char* data = new unsigned char[message.length()+1];
     auto x = message.toLatin1();
-    data[0] = 0x44;
+    //data[0] = 0x44;
+    data[0] = 0x00 | (frequencyChoice<<5) | (modulationChoide<<1);
+    //qDebug()<<"Frame settings: "<<QString::number(data[0], 2);
+    //std::cout<<"Frame settings: "<<std::bitset<8>(data[0]);
     for(int i=0;i<message.length(); i++){
         data[i+1] = x[i];
     }
@@ -97,7 +103,6 @@ void COMDriver::receiveFrame(){
                 checksum += receivedData.at(frameLen+4);
                 LocalFrame f(0x02, cmd, data, frameLen);
                 unsigned char response[1];
-                qDebug()<<"Checksum: "<<(void*)   (f.computeChecksum())<< ", "<<(void*)checksum;
                 if(f.computeChecksum() == checksum){
                     response[0] = ACK;
                     qSerialPort->write( (const char*)response, 1 );
@@ -110,15 +115,51 @@ void COMDriver::receiveFrame(){
                     }
                     if(0x51 == cmd){
                         qDebug()<<"DL Data comfirm";
-                        for(int i=0;i<frameLen;++i){
+                        /*for(int i=0;i<frameLen;++i){
                             qDebug()<< QString::number(data[i],16);
-                        }
+                        }*/
                     }
                     if(0x52 == cmd){
                         qDebug()<<"DL Data indication";
-                        for(int i=0;i<frameLen;++i){
-                            qDebug()<< QString::number(data[i],16) << " " << (char)data[i];
+                        QString message;
+                        switch( ((char)data[0]>>5) & 0x07 ){
+                            case 0:
+                            qDebug()<<"Modulation B-PSK";
+                            break;
+                            case 1:
+                            qDebug()<<"Modulation Q-PSK";
+                            break;
+                            case 2:
+                            qDebug()<<"Modulation 8-PSK";
+                            break;
+                            case 3:
+                            qDebug()<<"Modulation B-FSK";
+                            break;
+                            case 4:
+                            qDebug()<<"Modulation B-PSK coded";
+                            break;
+                            case 5:
+                            qDebug()<<"Modulation Q-PSK coded";
+                            break;
+                            case 7:
+                            qDebug()<<"Modulation B-PSK w/ PNA";
+                            break;
+                        }
+                        if( (((char)data[0]>>4) & 0x01) == 0x01 ){
+                            qDebug()<<"RX channel high";
+                        }else{
+                            qDebug()<<"RX channel low";
+                        }
+                        qDebug()<<"PGA Value: "<<(((char)data[0]) & 0x0F);
+                        qDebug()<<"SNR Value: "<<(((char)data[1]) & 0xFF);
+                        short zcDelay = ((char)data[2]);
+                        zcDelay <<= 8;
+                        zcDelay += ((char)data[3]);
+                        qDebug()<<"ZC  Value: "<<zcDelay;
+                        for(int i=4;i<frameLen;++i){
+                            message += (char)data[i];
                         }//0265
+                        qDebug()<<"Message: "<<message;
                     }
                 }else{
                     response[0] = NAK;
@@ -132,7 +173,6 @@ void COMDriver::receiveFrame(){
                     if(receivedData.size()<0){
                         break;
                     }else{
-                        //qDebug()<< (void*)receivedData.at(0);
                         receivedData.removeFirst();
                     }
                 }
