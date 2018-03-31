@@ -34,10 +34,81 @@
         </property>
        </widget>
       </item>
+     </layout>
+    </item>
+    <item>
+     <layout class="QHBoxLayout" name="horizontalLayout_2">
+      <item>
+       <widget class="QComboBox" name="comboBox_frequency">
+        <item>
+         <property name="text">
+          <string>Low frequency</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>High frequency</string>
+         </property>
+        </item>
+       </widget>
+      </item>
+      <item>
+       <widget class="QComboBox" name="comboBox_modulation">
+        <item>
+         <property name="text">
+          <string>B-PSK</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>Q-PSK</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>8-PSK</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>B-FSK</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>B-PSK coded</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>Q-PSK coded</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>B-PSK c w/PNA</string>
+         </property>
+        </item>
+       </widget>
+      </item>
       <item>
        <widget class="QPushButton" name="pushButton">
         <property name="text">
          <string>SendDL</string>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </item>
+    <item>
+     <layout class="QVBoxLayout" name="verticalLayout">
+      <item>
+       <widget class="QLineEdit" name="lineEdit_msg">
+        <property name="baseSize">
+         <size>
+          <width>100</width>
+          <height>0</height>
+         </size>
         </property>
        </widget>
       </item>

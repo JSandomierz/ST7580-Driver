@@ -15,7 +15,7 @@ QList<QSerialPortInfo> COMDriver::getPorts(){
     return QSerialPortInfo::availablePorts();
 }
 
-bool COMDriver::openPort(QString &portName){
+bool COMDriver::openPort(QString &portName){//407
     qSerialPort->setPortName(portName);
     qSerialPort->setBaudRate(QSerialPort::Baud57600);
     qSerialPort->setDataBits(QSerialPort::Data8);
@@ -62,8 +62,6 @@ void COMDriver::sendDLFrame(){
     auto x = message.toLatin1();
     //data[0] = 0x44;
     data[0] = 0x00 | (frequencyChoice<<5) | (modulationChoide<<1);
-    //qDebug()<<"Frame settings: "<<QString::number(data[0], 2);
-    //std::cout<<"Frame settings: "<<std::bitset<8>(data[0]);
     for(int i=0;i<message.length(); i++){
         data[i+1] = x[i];
     }

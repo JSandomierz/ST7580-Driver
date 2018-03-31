@@ -44,8 +44,6 @@ unsigned char* LocalFrame::packFrame(){
 
 unsigned int LocalFrame::computeChecksum(){
     unsigned char* f = this->packFrame();
-    //f[Length+3] = 0x26;
-    //f[Length + 4] = 0x05;
     unsigned int checksum = 0;
     checksum += f[Length + 3] << 8;
     checksum += ( f[Length + 4]);
