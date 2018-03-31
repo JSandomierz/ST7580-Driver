@@ -87,7 +87,6 @@ void COMDriver::receiveFrame(){
             receivedData.removeFirst();
             receivedData.removeFirst();
         }else if(0x02 == x && receivedData.size()>=5){
-            //qDebug()<<"Transmisja";
             unsigned char frameLen = receivedData.at(1);
             if(receivedData.size() >= frameLen+5){
                 unsigned char cmd = receivedData.at(2);
@@ -104,7 +103,7 @@ void COMDriver::receiveFrame(){
                 if(f.computeChecksum() == checksum){
                     response[0] = ACK;
                     qSerialPort->write( (const char*)response, 1 );
-                    qDebug()<<"Ramka ok";
+                    qDebug()<<"Frame ok";
                     if(0x3D == cmd){//reset confirm
                         qDebug()<<"Reset confirm";
                     }
@@ -176,7 +175,7 @@ void COMDriver::receiveFrame(){
                 }
             }
         }else if(0x03 == x){
-            qDebug()<<"Retransmisja?";
+            qDebug()<<"Retransmission";
             receivedData.removeFirst();
         }else{
             receivedData.removeFirst();
